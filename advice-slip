@@ -1,0 +1,32 @@
+#!/usr/bin/env python3
+"""API client for api.adviceslip.com"""
+
+import textwrap
+
+import requests
+
+API_ENDPOINT = "https://api.adviceslip.com/advice"
+
+
+def fetch_advice():
+    """Fetch random advice from the API"""
+
+    headers = {"User-Agent": "adviceslip-client/1.0"}
+    session = requests.Session()
+    response = session.get(API_ENDPOINT, headers=headers)
+    return response.json().get("slip")
+
+
+def print_advice(advice_slip):
+    """Print an advice slip"""
+
+    lines = textwrap.wrap(advice_slip.get("advice"), width=50)
+
+    print("= " * 25)
+    print("ADVICE SLIP #{}\n".format(advice_slip.get("id")))
+    print("\n".join(lines))
+    print("= " * 25)
+
+
+if __name__ == "__main__":
+    print_advice(fetch_advice())
